@@ -15,7 +15,7 @@ import java.net.URI;
 public class URIUtil {
 
   /** Prevent instance creation. */
-  private void URIUtil() {}
+  private void util() {}
 
   /** Returns the name of an URI for display in the title bar of a window. */
   public static String getName(URI uri) {
