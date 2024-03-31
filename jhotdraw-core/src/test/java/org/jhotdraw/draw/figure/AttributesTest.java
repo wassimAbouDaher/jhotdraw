@@ -32,12 +32,12 @@ public class AttributesTest {
 
   @Test
   public void testBackupRestore() {
-    Attributes attr = new Attributes();
+    AttributesFigure attr = new AttributesFigure();
     attr.set(AttributeKeys.STROKE_WIDTH, 1.5);
 
     Object backup = attr.getAttributesRestoreData();
 
-    Attributes attrRestored = new Attributes();
+    AttributesFigure attrRestored = new AttributesFigure();
     assertThat(attrRestored.getAttributes()).isEmpty();
 
     attrRestored.restoreAttributesTo(backup);

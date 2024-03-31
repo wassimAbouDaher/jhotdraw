@@ -61,7 +61,7 @@ public class CreationTool extends AbstractTool {
   private static final long serialVersionUID = 1L;
 
   /**
-   * Attributes to be applied to the created ConnectionFigure. These attributes override the default
+   * AttributesFigure to be applied to the created ConnectionFigure. These attributes override the default
    * attributes of the DrawingEditor.
    */
   protected Map<AttributeKey<?>, Object> prototypeAttributes;

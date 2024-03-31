@@ -8,9 +8,6 @@
 package org.jhotdraw.draw.figure;
 
 import static org.jhotdraw.draw.AttributeKeys.*;
-import static org.jhotdraw.draw.AttributeKeys.StrokePlacement.CENTER;
-import static org.jhotdraw.draw.AttributeKeys.StrokePlacement.INSIDE;
-import static org.jhotdraw.draw.AttributeKeys.StrokePlacement.OUTSIDE;
 
 import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
@@ -123,7 +120,7 @@ public class GraphicalCompositeFigure extends AbstractAttributedCompositeFigure 
   private void initAttributeDependentSupplier() {
     attr()
         .dependents(
-            Attributes.attrSupplier(
+            AttributesFigure.attrSupplier(
                 () -> {
                   var list = new ArrayList<>(this.getChildren());
                   list.add(getPresentationFigure());

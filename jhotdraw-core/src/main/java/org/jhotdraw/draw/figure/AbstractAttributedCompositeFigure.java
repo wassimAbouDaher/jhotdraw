@@ -526,10 +526,10 @@ public abstract class AbstractAttributedCompositeFigure extends AbstractAttribut
   public AbstractAttributedCompositeFigure clone() {
     AbstractAttributedCompositeFigure that = (AbstractAttributedCompositeFigure) super.clone();
     that.attributes =
-        Attributes.from(
+        AttributesFigure.from(
             attributes,
             that::fireAttributeChanged,
-            Attributes.attrSupplier(() -> that.getChildren()));
+            AttributesFigure.attrSupplier(() -> that.getChildren()));
     that.children = new ArrayList<>();
     that.eventHandler = that.createEventHandler();
     for (Figure thisChild : this.children) {
@@ -664,13 +664,13 @@ public abstract class AbstractAttributedCompositeFigure extends AbstractAttribut
     listenerList.add(CompositeFigureListener.class, listener);
   }
 
-  private Attributes attributes =
-      new Attributes(
+  private AttributesFigure attributes =
+      new AttributesFigure(
           this::fireAttributeChanged,
-          Attributes.attrSupplier(() -> AbstractAttributedCompositeFigure.this.getChildren()));
+          AttributesFigure.attrSupplier(() -> AbstractAttributedCompositeFigure.this.getChildren()));
 
   @Override
-  public Attributes attr() {
+  public AttributesFigure attr() {
     return attributes;
   }
 

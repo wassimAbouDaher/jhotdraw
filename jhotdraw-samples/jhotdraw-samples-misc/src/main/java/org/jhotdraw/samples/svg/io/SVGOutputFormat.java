@@ -600,7 +600,7 @@ public class SVGOutputFormat implements OutputFormat {
   }
 
   // ------------
-  // Attributes
+  // AttributesFigure
   // ------------
   /* Writes shape attributes.
    */

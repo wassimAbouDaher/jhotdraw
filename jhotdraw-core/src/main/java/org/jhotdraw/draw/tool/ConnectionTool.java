@@ -51,7 +51,7 @@ public class ConnectionTool extends AbstractTool {
   private static final int ANCHOR_WIDTH = 6;
 
   /**
-   * Attributes to be applied to the created ConnectionFigure. These attributes override the default
+   * AttributesFigure to be applied to the created ConnectionFigure. These attributes override the default
    * attributes of the DrawingEditor.
    */
   private Map<AttributeKey<?>, Object> prototypeAttributes;

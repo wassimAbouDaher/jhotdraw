@@ -83,7 +83,7 @@ public class AbstractFigureTest {
     }
 
     @Override
-    public Attributes attr() {
+    public AttributesFigure attr() {
       return null;
     }
 

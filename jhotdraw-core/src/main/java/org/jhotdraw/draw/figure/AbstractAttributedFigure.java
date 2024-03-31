@@ -61,10 +61,10 @@ public abstract class AbstractAttributedFigure implements Figure, Cloneable {
   private boolean isTransformable = true;
   private boolean isConnectable = true;
 
-  private Attributes attributes = new Attributes(this::fireAttributeChanged);
+  private AttributesFigure attributes = new AttributesFigure(this::fireAttributeChanged);
 
   @Override
-  public Attributes attr() {
+  public AttributesFigure attr() {
     return attributes;
   }
 
@@ -158,7 +158,7 @@ public abstract class AbstractAttributedFigure implements Figure, Cloneable {
     } catch (CloneNotSupportedException ex) {
       throw new InternalError("clone failed", ex);
     }
-    that.attributes = Attributes.from(attributes, that::fireAttributeChanged);
+    that.attributes = AttributesFigure.from(attributes, that::fireAttributeChanged);
     that.listenerList = new EventListenerList();
     that.drawing = null; // Clones need to be explictly added to a drawing
     return that;

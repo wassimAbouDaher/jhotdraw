@@ -19,5 +19,5 @@
 package org.jhotdraw.draw.figure;
 
 public interface AttributeProvider {
-  public Attributes attr();
+  public AttributesFigure attr();
 }

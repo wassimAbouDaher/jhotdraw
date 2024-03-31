@@ -25,7 +25,7 @@ import org.jhotdraw.draw.event.DrawingEvent;
 import org.jhotdraw.draw.event.DrawingListener;
 import org.jhotdraw.draw.event.FigureEvent;
 import org.jhotdraw.draw.event.FigureListenerAdapter;
-import org.jhotdraw.draw.figure.Attributes;
+import org.jhotdraw.draw.figure.AttributesFigure;
 import org.jhotdraw.draw.figure.Figure;
 import org.jhotdraw.draw.io.InputFormat;
 import org.jhotdraw.draw.io.OutputFormat;
@@ -44,7 +44,7 @@ public abstract class AbstractDrawing implements Drawing {
 
   protected EventHandler eventHandler = new EventHandler();
   protected EventListenerList listenerList = new EventListenerList();
-  private Attributes attributes = new Attributes(this::fireDrawingAttributeChanged);
+  private AttributesFigure attributes = new AttributesFigure(this::fireDrawingAttributeChanged);
   private transient FontRenderContext fontRenderContext;
   private List<InputFormat> inputFormats = new ArrayList<>();
   private List<OutputFormat> outputFormats = new ArrayList<>();
@@ -93,7 +93,7 @@ public abstract class AbstractDrawing implements Drawing {
   }
 
   @Override
-  public Attributes attr() {
+  public AttributesFigure attr() {
     return attributes;
   }
 
@@ -151,7 +151,7 @@ public abstract class AbstractDrawing implements Drawing {
     } catch (CloneNotSupportedException ex) {
       throw new InternalError("clone failed", ex);
     }
-    that.attributes = Attributes.from(attributes, that::fireDrawingAttributeChanged);
+    that.attributes = AttributesFigure.from(attributes, that::fireDrawingAttributeChanged);
     that.listenerList = new EventListenerList();
 
     that.inputFormats = (this.inputFormats == null) ? null : new ArrayList<>(this.inputFormats);
