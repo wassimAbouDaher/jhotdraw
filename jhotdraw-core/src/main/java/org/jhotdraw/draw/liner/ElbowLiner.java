@@ -19,14 +19,14 @@ import org.jhotdraw.geom.path.BezierPath;
 /** A {@link Liner} that constrains a connection to orthogonal lines. */
 public class ElbowLiner implements Liner {
 
-  private double shoulderSize;
+  private double elbowSize;
 
   public ElbowLiner() {
     this(20);
   }
 
   public ElbowLiner(double slantSize) {
-    this.shoulderSize = slantSize;
+    this.elbowSize = slantSize;
   }
 
   @Override
@@ -83,24 +83,24 @@ public class ElbowLiner implements Liner {
           soutcode = Geom.OUT_RIGHT;
           break;
       }
-      path.nodes().get(1).moveTo(sp.x + shoulderSize, sp.y);
+      path.nodes().get(1).moveTo(sp.x + elbowSize, sp.y);
       if ((soutcode & Geom.OUT_RIGHT) != 0) {
-        path.nodes().get(1).moveTo(sp.x + shoulderSize, sp.y);
+        path.nodes().get(1).moveTo(sp.x + elbowSize, sp.y);
       } else if ((soutcode & Geom.OUT_LEFT) != 0) {
-        path.nodes().get(1).moveTo(sp.x - shoulderSize, sp.y);
+        path.nodes().get(1).moveTo(sp.x - elbowSize, sp.y);
       } else if ((soutcode & Geom.OUT_BOTTOM) != 0) {
-        path.nodes().get(1).moveTo(sp.x, sp.y + shoulderSize);
+        path.nodes().get(1).moveTo(sp.x, sp.y + elbowSize);
       } else {
-        path.nodes().get(1).moveTo(sp.x, sp.y - shoulderSize);
+        path.nodes().get(1).moveTo(sp.x, sp.y - elbowSize);
       }
       if ((eoutcode & Geom.OUT_RIGHT) != 0) {
-        path.nodes().get(3).moveTo(ep.x + shoulderSize, ep.y);
+        path.nodes().get(3).moveTo(ep.x + elbowSize, ep.y);
       } else if ((eoutcode & Geom.OUT_LEFT) != 0) {
-        path.nodes().get(3).moveTo(ep.x - shoulderSize, ep.y);
+        path.nodes().get(3).moveTo(ep.x - elbowSize, ep.y);
       } else if ((eoutcode & Geom.OUT_BOTTOM) != 0) {
-        path.nodes().get(3).moveTo(ep.x, ep.y + shoulderSize);
+        path.nodes().get(3).moveTo(ep.x, ep.y + elbowSize);
       } else {
-        path.nodes().get(3).moveTo(ep.x, ep.y - shoulderSize);
+        path.nodes().get(3).moveTo(ep.x, ep.y - elbowSize);
       }
       switch (soutcode) {
         case Geom.OUT_RIGHT:
