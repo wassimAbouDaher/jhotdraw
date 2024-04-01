@@ -74,19 +74,19 @@ public class AbstractConnector implements Connector {
 
   @Override
   public Point2D.Double findStart(ConnectionFigure connection) {
-    return findPoint(connection);
+    return findPoint();
   }
 
   @Override
   public Point2D.Double findEnd(ConnectionFigure connection) {
-    return findPoint(connection);
+    return findPoint();
   }
 
   /**
    * Gets the connection point. Override when the connector does not need to distinguish between the
    * start and end point of a connection.
    */
-  protected Point2D.Double findPoint(ConnectionFigure connection) {
+  protected Point2D.Double findPoint() {
     return Geom.center(getBounds());
   }
 
