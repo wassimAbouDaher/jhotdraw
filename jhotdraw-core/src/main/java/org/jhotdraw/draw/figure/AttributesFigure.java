@@ -43,7 +43,7 @@ public final class AttributesFigure {
 
   private AttributeListener listener;
 
-  private Supplier<List<AttributesFigure>> DEPENDENT;
+  private Supplier<List<AttributesFigure>> dependent;
 
   public AttributesFigure() {
     this(null, null);
@@ -55,11 +55,11 @@ public final class AttributesFigure {
 
   public AttributesFigure(AttributeListener listener, Supplier<List<AttributesFigure>> dependent) {
     this.listener = listener;
-    this.DEPENDENT = dependent == null ? () -> Collections.emptyList() : dependent;
+    this.dependent = dependent == null ? () -> Collections.emptyList() : dependent;
   }
 
   public void dependents(Supplier<List<AttributesFigure>> dependent) {
-    this.DEPENDENT = dependent == null ? () -> Collections.emptyList() : dependent;
+    this.dependent = dependent == null ? () -> Collections.emptyList() : dependent;
   }
 
   public void setAttributeEnabled(AttributeKey<?> key, boolean b) {
@@ -98,7 +98,7 @@ public final class AttributesFigure {
    * applied to it.
    */
   public Object getAttributesRestoreData() {
-    List<AttributesFigure> dependent = DEPENDENT.get();
+    List<AttributesFigure> dependent = this.dependent.get();
     if (dependent.isEmpty()) {
       return getAttributes();
     } else {
@@ -117,7 +117,7 @@ public final class AttributesFigure {
       List<Map<AttributeKey<?>, Object>> list = (List<Map<AttributeKey<?>, Object>>) restoreData;
       restoreAttributesTo(list.get(0));
       int idx = 1;
-      for (AttributesFigure attr : DEPENDENT.get()) {
+      for (AttributesFigure attr : dependent.get()) {
         attr.restoreAttributesTo(list.get(idx));
         idx++;
       }
@@ -150,7 +150,7 @@ public final class AttributesFigure {
       fireAttributeChanged(key, oldValue, newValue);
     }
 
-    DEPENDENT.get().forEach(a -> Optional.ofNullable(a).ifPresent(at -> at.set(key, newValue)));
+    dependent.get().forEach(a -> Optional.ofNullable(a).ifPresent(at -> at.set(key, newValue)));
     return this;
   }
 
