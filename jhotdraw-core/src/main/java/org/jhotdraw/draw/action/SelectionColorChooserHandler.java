@@ -24,7 +24,6 @@ public class SelectionColorChooserHandler extends AbstractSelectedAction impleme
   protected JPopupMenu popupMenu;
   protected int isUpdating;
 
-  // protected Map<AttributeKey, Object> attributes;
 
   public SelectionColorChooserHandler(
       DrawingEditor editor,
@@ -35,18 +34,12 @@ public class SelectionColorChooserHandler extends AbstractSelectedAction impleme
     this.key = key;
     this.colorChooser = colorChooser;
     this.popupMenu = popupMenu;
-    // colorChooser.addActionListener(this);
     colorChooser.getSelectionModel().addChangeListener(this);
     updateEnabledState();
   }
 
   @Override
   public void actionPerformed(java.awt.event.ActionEvent evt) {
-    /*
-    if (evt.getActionCommand() == JColorChooser.APPROVE_SELECTION) {
-        applySelectedColorToFigures();
-    } else if (evt.getActionCommand() == JColorChooser.CANCEL_SELECTION) {
-    }*/
     popupMenu.setVisible(false);
   }
 
@@ -72,16 +65,6 @@ public class SelectionColorChooserHandler extends AbstractSelectedAction impleme
           @Override
           public String getPresentationName() {
             return AttributeKeys.FONT_FACE.getPresentationName();
-            /*
-            String name = (String) getValue(Actions.UNDO_PRESENTATION_NAME_KEY);
-            if (name == null) {
-            name = (String) getValue(AbstractAction.NAME);
-            }
-            if (name == null) {
-            ResourceBundleUtil labels = ResourceBundleUtil.getBundle("org.jhotdraw.draw.Labels");
-            name = labels.getString("attribute.text");
-            }
-            return name;*/
           }
 
           @Override
@@ -99,7 +82,6 @@ public class SelectionColorChooserHandler extends AbstractSelectedAction impleme
           public void redo() {
             super.redo();
             for (Figure figure : selectedFigures) {
-              // restoreData.add(figure.getAttributesRestoreData());
               figure.willChange();
               figure.attr().set(key, undoValue);
               figure.changed();

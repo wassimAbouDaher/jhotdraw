@@ -23,7 +23,6 @@ public class DrawingColorChooserHandler extends AbstractDrawingViewAction
   protected JPopupMenu popupMenu;
   protected int isUpdating;
 
-  // protected Map<AttributeKey, Object> attributes;
 
   public DrawingColorChooserHandler(
       DrawingEditor editor,
@@ -34,18 +33,12 @@ public class DrawingColorChooserHandler extends AbstractDrawingViewAction
     this.key = key;
     this.colorChooser = colorChooser;
     this.popupMenu = popupMenu;
-    // colorChooser.addActionListener(this);
     colorChooser.getSelectionModel().addChangeListener(this);
     updateEnabledState();
   }
 
   @Override
   public void actionPerformed(java.awt.event.ActionEvent evt) {
-    /*
-    if (evt.getActionCommand() == JColorChooser.APPROVE_SELECTION) {
-    applySelectedColorToFigures();
-    } else if (evt.getActionCommand() == JColorChooser.CANCEL_SELECTION) {
-    }*/
     popupMenu.setVisible(false);
   }
 
@@ -68,16 +61,6 @@ public class DrawingColorChooserHandler extends AbstractDrawingViewAction
           @Override
           public String getPresentationName() {
             return AttributeKeys.FONT_FACE.getPresentationName();
-            /*
-            String name = (String) getValue(Actions.UNDO_PRESENTATION_NAME_KEY);
-            if (name == null) {
-            name = (String) getValue(AbstractAction.NAME);
-            }
-            if (name == null) {
-            ResourceBundleUtil labels = ResourceBundleUtil.getBundle("org.jhotdraw.draw.Labels");
-            name = labels.getString("attribute.text");
-            }
-            return name;*/
           }
 
           @Override
@@ -91,7 +74,6 @@ public class DrawingColorChooserHandler extends AbstractDrawingViewAction
           @Override
           public void redo() {
             super.redo();
-            // restoreData.add(figure.getAttributesRestoreData());
             drawing.willChange();
             drawing.attr().set(key, undoValue);
             drawing.changed();

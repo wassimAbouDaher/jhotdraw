@@ -89,8 +89,6 @@ public class TextFigure extends AbstractAttributedDecoratedFigure
         double alignDeltaY =
             (layout.getAscent() + layout.getDescent()) * attr().get(AttributeKeys.ALIGN_RELATIVE_Y);
 
-        // g2.draw(getBounds(AttributeKeys.getScaleFactorFromGraphics(g)));
-
         // Test if world to screen transformation mirrors the text. If so it tries to
         // unmirror it.
         if (g2.getTransform().getScaleY() * g2.getTransform().getScaleX() < 0) {
@@ -289,7 +287,6 @@ public class TextFigure extends AbstractAttributedDecoratedFigure
 
   @Override
   public int getTextColumns() {
-    // return (getText() == null) ? 4 : Math.max(getText().length(), 4);
     return 4;
   }
 

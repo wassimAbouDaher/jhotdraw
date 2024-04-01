@@ -30,7 +30,7 @@ public abstract class MoveAction extends AbstractSelectedAction {
 
   @Override
   public void actionPerformed(java.awt.event.ActionEvent e) {
-    CompositeEdit edit;
+
     AffineTransform tx = new AffineTransform();
     tx.translate(dx, dy);
     HashSet<Figure> transformedFigures = new HashSet<>();

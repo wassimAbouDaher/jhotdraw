@@ -18,9 +18,7 @@ public class UngroupAction extends GroupAction {
   private static final long serialVersionUID = 1L;
   public static final String ID = "edit.ungroupSelection";
 
-  private CompositeFigure prototype;
-
-  public UngroupAction(DrawingEditor editor) {
+    public UngroupAction(DrawingEditor editor) {
     super(editor, new GroupFigure(), false);
     ResourceBundleUtil labels = ResourceBundleUtil.getBundle("org.jhotdraw.draw.Labels");
     labels.configureAction(this, ID);

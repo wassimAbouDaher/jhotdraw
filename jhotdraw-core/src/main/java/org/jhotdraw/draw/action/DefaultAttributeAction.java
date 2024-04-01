@@ -112,6 +112,5 @@ public class DefaultAttributeAction extends AbstractSelectedAction {
   }
 
   public void selectionChanged(FigureSelectionEvent evt) {
-    // setEnabled(getView().getSelectionCount() > 0);
   }
 }

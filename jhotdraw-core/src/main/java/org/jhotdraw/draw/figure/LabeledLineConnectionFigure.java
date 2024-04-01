@@ -86,7 +86,7 @@ public class LabeledLineConnectionFigure extends LineConnectionFigure implements
       owner.fireUndoableEditHappened(e.getEdit());
     }
   }
-  ;
+
 
   public LabeledLineConnectionFigure() {}
 

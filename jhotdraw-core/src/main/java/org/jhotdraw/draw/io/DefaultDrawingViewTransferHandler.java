@@ -7,9 +7,7 @@
  */
 package org.jhotdraw.draw.io;
 
-import static javax.swing.TransferHandler.COPY;
-import static javax.swing.TransferHandler.MOVE;
-import static javax.swing.TransferHandler.NONE;
+
 
 import java.awt.Graphics;
 import java.awt.Image;
@@ -47,7 +45,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.SwingWorker;
 import javax.swing.TransferHandler;
-import javax.swing.TransferHandler.TransferSupport;
 import javax.swing.undo.AbstractUndoableEdit;
 import javax.swing.undo.CannotRedoException;
 import javax.swing.undo.CannotUndoException;
@@ -228,12 +225,11 @@ public class DefaultDrawingViewTransferHandler extends TransferHandler {
               @Override
               protected List<Figure> doInBackground() throws Exception {
                 for (File file : files) {
-                  FileFormatLoop:
-                  for (InputFormat format : drawing.getInputFormats()) {
-                    if (file.isFile() && format.getFileFilter().accept(file)) {
-                      format.read(file.toURI(), drawing, false);
+                    for (InputFormat format : drawing.getInputFormats()) {
+                        if (file.isFile() && format.getFileFilter().accept(file)) {
+                            format.read(file.toURI(), drawing, false);
+                        }
                     }
-                  }
                 }
                 return new ArrayList<>(drawing.getChildren());
               }
@@ -303,7 +299,6 @@ public class DefaultDrawingViewTransferHandler extends TransferHandler {
     } else {
       final DrawingView view = extractDrawingView(component);
       Point2D.Double drawingDropPoint = view.viewToDrawing(dropPoint);
-      // Set<Figure> transferFigures = view.getSelectedFigures();
       Rectangle2D.Double drawingArea = null;
       for (Figure fig : transferFigures) {
         if (drawingArea == null) {
@@ -402,7 +397,6 @@ public class DefaultDrawingViewTransferHandler extends TransferHandler {
             return;
           }
         }
-        // view.clearSelection();
         DrawingListener removeListener =
             new DrawingListenerAdapter() {
               @Override
@@ -549,7 +543,6 @@ public class DefaultDrawingViewTransferHandler extends TransferHandler {
         scrolls = c.getAutoscrolls();
         c.setAutoscrolls(false);
         try {
-          //                    dge.startDrag(null, t, this);
           Icon icon = th.getVisualRepresentation(t);
           Image dragImage;
           if (icon instanceof ImageIcon) {

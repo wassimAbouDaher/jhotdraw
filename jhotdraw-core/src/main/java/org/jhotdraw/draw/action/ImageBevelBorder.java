@@ -24,9 +24,7 @@ import javax.swing.border.*;
  */
 public class ImageBevelBorder implements Border {
 
-  private static final boolean VERBOSE = false;
-
-  /** The image to be used for drawing. */
+    /** The image to be used for drawing. */
   private BufferedImage image;
 
   /** The border insets */
@@ -141,11 +139,11 @@ public class ImageBevelBorder implements Border {
     }
     // Adjust insets if component is too small
     if (width < left + right) {
-      left = Math.min(left, width / 2); // Math.max(0, left + (width - left - right) / 2);
+      left = Math.min(left, width / 2);
       right = width - left;
     }
     if (height < top + bottom) {
-      top = Math.min(top, height / 2); // Math.max(0, top + (height - top - bottom) / 2);
+      top = Math.min(top, height / 2);
       bottom = height - top;
     }
     // Draw the Leads
@@ -153,7 +151,6 @@ public class ImageBevelBorder implements Border {
       g.drawImage(image, x, y, x + left, y + top, 0, 0, left, top, c);
     }
     if (top > 0 && right > 0) {
-      // g.fillRect(x+width-right, y, x+width, y+top);
       g.drawImage(
           image, x + width - right, y, x + width, y + top, imgWidth - right, 0, imgWidth, top, c);
     }

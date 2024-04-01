@@ -292,7 +292,6 @@ public abstract class AbstractAttributedCompositeFigure extends AbstractAttribut
       f.transform(tx);
     }
     invalidate();
-    // invalidate();
   }
 
   @Override
@@ -374,7 +373,6 @@ public abstract class AbstractAttributedCompositeFigure extends AbstractAttribut
 
   public Figure findChild(Point2D.Double p) {
     if (getBounds().contains(p)) {
-      Figure found = null;
       for (Figure child : getChildrenFrontToBack()) {
         if (child.isVisible() && child.contains(p)) {
           return child;

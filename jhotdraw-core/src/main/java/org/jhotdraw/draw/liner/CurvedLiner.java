@@ -83,7 +83,6 @@ public class CurvedLiner implements Liner {
           soutcode = Geom.OUT_RIGHT;
           break;
       }
-      // path.nodes().get(0).moveTo(sp.x + shoulderSize, sp.y);
       path.nodes().get(0).mask = BezierPath.C2_MASK;
       if ((soutcode & Geom.OUT_RIGHT) != 0) {
         path.nodes().get(0).x[2] = sp.x + curveSize;

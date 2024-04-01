@@ -30,11 +30,6 @@ public class AbstractConnector implements Connector {
   /** Whether we should connect to the figure or to its decorator. */
   private boolean isConnectToDecorator;
 
-  /**
-   * Whether the state of this connector is persistent. Set this to true only, when the user
-   * interface allows to change the state of the connector.
-   */
-  private boolean isStatePersistent;
 
   /**
    * Constructs a connector that has no owner. It is only used internally to resurrect a connectors
@@ -159,7 +154,5 @@ public class AbstractConnector implements Connector {
     Ellipse2D.Double e = new Ellipse2D.Double(anchor.x - 3, anchor.y - 3, 6, 6);
     g.setColor(Color.BLUE);
     g.fill(e);
-    // g.setColor(Color.BLACK);
-    // g.draw(e);
   }
 }

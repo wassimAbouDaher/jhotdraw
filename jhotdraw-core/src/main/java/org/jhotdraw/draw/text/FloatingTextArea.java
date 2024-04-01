@@ -105,7 +105,6 @@ public class FloatingTextArea {
     textArea.setFont(f);
     textArea.setForeground(editedFigure.getTextColor());
     textArea.setBackground(editedFigure.getFillColor());
-    //        textArea.setBounds(getFieldBounds(editedFigure));
   }
 
   /**
@@ -134,10 +133,9 @@ public class FloatingTextArea {
   /**
    * Gets the preferred size of the overlay.
    *
-   * @param cols Description of the Parameter
    * @return The preferredSize value
    */
-  public Dimension getPreferredSize(int cols) {
+  public Dimension getPreferredSize() {
     return new Dimension(textArea.getWidth(), textArea.getHeight());
   }
 

@@ -103,7 +103,6 @@ public class DrawingAttributeAction extends AbstractDrawingViewAction {
           @SuppressWarnings("unchecked")
           public void redo() {
             super.redo();
-            // restoreData.add(drawing.getAttributesRestoreData());
             drawing.willChange();
             for (Map.Entry<AttributeKey<?>, Object> entry : attributes.entrySet()) {
               drawing.attr().set((AttributeKey<Object>) entry.getKey(), entry.getValue());

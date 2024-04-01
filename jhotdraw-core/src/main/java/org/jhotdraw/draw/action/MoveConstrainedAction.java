@@ -7,10 +7,6 @@
  */
 package org.jhotdraw.draw.action;
 
-import static org.jhotdraw.draw.constrainer.TranslationDirection.EAST;
-import static org.jhotdraw.draw.constrainer.TranslationDirection.NORTH;
-import static org.jhotdraw.draw.constrainer.TranslationDirection.SOUTH;
-import static org.jhotdraw.draw.constrainer.TranslationDirection.WEST;
 
 import java.awt.geom.*;
 import java.util.HashSet;
@@ -77,7 +73,7 @@ public abstract class MoveConstrainedAction extends AbstractSelectedAction {
         f.transform(tx);
         f.changed();
       }
-      CompositeEdit edit;
+
       fireUndoableEditHappened(new TransformEdit(transformedFigures, tx));
     }
   }

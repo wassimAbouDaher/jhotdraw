@@ -68,11 +68,8 @@ public class TextAreaFigure extends AbstractAttributedDecoratedFigure implements
   private static final long serialVersionUID = 1L;
   protected Rectangle2D.Double bounds = new Rectangle2D.Double();
   protected boolean editable = true;
-  private static final BasicStroke DASHES =
-      new BasicStroke(
-          1f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0f, new float[] {4f, 4f}, 0f);
 
-  /** This is a cached value to improve the performance of method isTextOverflow(); */
+    /** This is a cached value to improve the performance of method isTextOverflow(); */
   private Boolean isTextOverflow;
 
   public TextAreaFigure() {
@@ -113,7 +110,6 @@ public class TextAreaFigure extends AbstractAttributedDecoratedFigure implements
       float verticalPos = (float) textRect.y;
       float maxVerticalPos = (float) (textRect.y + textRect.height);
       if (leftMargin < rightMargin) {
-        // float tabWidth = (float) (getTabSize() * g.getFontMetrics(font).charWidth('m'));
         float tabWidth =
             (float) (getTabSize() * font.getStringBounds("m", getFontRenderContext()).getWidth());
         float[] tabStops = new float[(int) (textRect.width / tabWidth)];
@@ -123,7 +119,7 @@ public class TextAreaFigure extends AbstractAttributedDecoratedFigure implements
         if (getText() != null) {
           Shape savedClipArea = g.getClip();
           g2.clip(textRect);
-          String[] paragraphs = getText().split("\n"); // Strings.split(getText(), '\n');
+          String[] paragraphs = getText().split("\n");
           for (int i = 0; i < paragraphs.length; i++) {
             if (paragraphs[i].length() == 0) {
               paragraphs[i] = " ";

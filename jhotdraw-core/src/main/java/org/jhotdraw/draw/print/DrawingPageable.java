@@ -70,8 +70,7 @@ public class DrawingPageable implements Pageable {
     };
   }
 
-  public int printPage(Graphics graphics, PageFormat pageFormat, int pageIndex)
-      throws PrinterException {
+  public int printPage(Graphics graphics, PageFormat pageFormat, int pageIndex) {
     if (pageIndex < 0 || pageIndex >= getNumberOfPages()) {
       return Printable.NO_SUCH_PAGE;
     }

@@ -59,7 +59,7 @@ public class ApplyAttributesAction extends AbstractSelectedAction {
     view.getDrawing().fireUndoableEditHappened(edit);
   }
 
-  public void selectionChanged(FigureSelectionEvent evt) {
+  public void selectionChanged() {
     setEnabled(getView().getSelectionCount() == 1);
   }
 }

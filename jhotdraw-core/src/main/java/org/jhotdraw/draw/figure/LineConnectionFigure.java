@@ -220,45 +220,6 @@ public class LineConnectionFigure extends LineFigure implements ConnectionFigure
     }
   }
 
-  // COMPOSITE FIGURES
-  // LAYOUT
-  /*
-  public Liner getBezierPathLayouter() {
-  return (Liner) get(BEZIER_PATH_LAYOUTER);
-  }
-  public void setBezierPathLayouter(Liner newValue) {
-  set(BEZIER_PATH_LAYOUTER, newValue);
-  }
-  /**
-   * Lays out the connection. This is called when the connection
-   * itself changes. By default the connection is recalculated
-   * /
-  public void layoutConnection() {
-  if (getStartConnector() != null && getEndConnector() != null) {
-  willChange();
-  Liner bpl = getBezierPathLayouter();
-  if (bpl != null) {
-  bpl.lineout(this);
-  } else {
-  if (getStartConnector() != null) {
-  Point2D.Double start = getStartConnector().findStart(this);
-  if(start != null) {
-  basicSetStartPoint(start);
-  }
-  }
-  if (getEndConnector() != null) {
-  Point2D.Double end = getEndConnector().findEnd(this);
-  if(end != null) {
-  basicSetEndPoint(end);
-  }
-  }
-  }
-  changed();
-  }
-  }
-   */
-  // CLONING
-  // EVENT HANDLING
   /**
    * This method is invoked, when the Figure is being removed from a Drawing. This method invokes
    * handleConnect, if the Figure is connected.
@@ -285,14 +246,6 @@ public class LineConnectionFigure extends LineFigure implements ConnectionFigure
     if (getStartConnector() != null && getEndConnector() != null) {
       handleDisconnect(getStartConnector(), getEndConnector());
     }
-    // Note: we do not set the connectors to null here, because we
-    // need them when we are added back to a drawing again. For example,
-    // when an undo is performed, after the LineConnection has been
-    // deleted.
-    /*
-    setStartConnector(null);
-    setEndConnector(null);
-     */
     super.removeNotify(drawing);
   }
 
@@ -336,7 +289,6 @@ public class LineConnectionFigure extends LineFigure implements ConnectionFigure
       that.getEndFigure().addFigureListener(that.connectionHandler);
     }
     if (that.startConnector != null && that.endConnector != null) {
-      // that.handleConnect(that.getStartConnector(), that.getEndConnector());
       that.updateConnection();
     }
     return that;
@@ -443,25 +395,7 @@ public class LineConnectionFigure extends LineFigure implements ConnectionFigure
     super.setNode(index, p);
   }
 
-  /*
-  public void basicSetPoint(int index, Point2D.Double p) {
-  if (index != 0 && index != getNodeCount() - 1) {
-  if (getStartConnector() != null) {
-  Point2D.Double start = getStartConnector().findStart(this);
-  if(start != null) {
-  basicSetStartPoint(start);
-  }
-  }
-  if (getEndConnector() != null) {
-  Point2D.Double end = getEndConnector().findEnd(this);
-  if(end != null) {
-  basicSetEndPoint(end);
-  }
-  }
-  }
-  super.basicSetPoint(index, p);
-  }
-   */
+
   @Override
   public void lineout() {
     if (liner != null) {
