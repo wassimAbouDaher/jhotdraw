@@ -29,14 +29,6 @@ public class PickAttributesAction extends AbstractSelectedAction {
     updateEnabledState();
   }
 
-  /**
-   * Set of attributes that is excluded when applying default attributes. By default, the TRANSFORM
-   * attribute is excluded.
-   */
-  public void setExcludedAttributes(Set<AttributeKey<?>> a) {
-    this.excludedAttributes = a;
-  }
-
   @Override
   public void actionPerformed(java.awt.event.ActionEvent e) {
     pickAttributes();

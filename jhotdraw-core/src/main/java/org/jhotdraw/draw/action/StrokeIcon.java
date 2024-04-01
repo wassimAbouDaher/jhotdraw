@@ -34,10 +34,5 @@ public class StrokeIcon implements javax.swing.Icon {
     g.setStroke(stroke);
     g.setColor(c.isEnabled() ? Color.black : Color.GRAY);
     g.drawLine(x, y + getIconHeight() / 2, x + getIconWidth(), y + getIconHeight() / 2);
-    /*
-    g.setStroke(new BasicStroke());
-    g.setColor(Color.red);
-    g.drawLine(x, y, x + getIconWidth(), y + getIconHeight());
-     */
   }
 }

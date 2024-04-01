@@ -39,10 +39,6 @@ public class DiamondFigure extends AbstractAttributedFigure {
 
   public DiamondFigure(double x, double y, double width, double height) {
     rectangle = new Rectangle2D.Double(x, y, width, height);
-    /*
-    setFillColor(Color.white);
-    setStrokeColor(Color.black);
-    */
   }
 
   // DRAWING

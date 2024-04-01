@@ -25,8 +25,7 @@ import org.jhotdraw.geom.Geom;
  */
 public class BezierScaleHandle extends AbstractHandle {
 
-  private Point location;
-  private Object restoreData;
+    private Object restoreData;
   private AffineTransform transform;
   private Point2D.Double center;
   private double startTheta;
@@ -77,8 +76,7 @@ public class BezierScaleHandle extends AbstractHandle {
 
   @Override
   public void trackStart(Point anchor, int modifiersEx) {
-    location = new Point(anchor.x, anchor.y);
-    restoreData = getBezierFigure().getTransformRestoreData();
+      restoreData = getBezierFigure().getTransformRestoreData();
     transform = new AffineTransform();
     center = getBezierFigure().getCenter();
     Point2D.Double anchorPoint = view.viewToDrawing(anchor);
@@ -88,8 +86,7 @@ public class BezierScaleHandle extends AbstractHandle {
 
   @Override
   public void trackStep(Point anchor, Point lead, int modifiersEx) {
-    location = new Point(lead.x, lead.y);
-    Point2D.Double leadPoint = view.viewToDrawing(lead);
+      Point2D.Double leadPoint = view.viewToDrawing(lead);
     double stepTheta = Geom.angle(center.x, center.y, leadPoint.x, leadPoint.y);
     double stepLength = Geom.length(center.x, center.y, leadPoint.x, leadPoint.y);
     double scaleFactor =
@@ -107,40 +104,11 @@ public class BezierScaleHandle extends AbstractHandle {
     getOwner().changed();
   }
 
-  /*
-  * public  void scaleRotate(Point anchor, Polygon originalPolygon, Point p) {
-             willChange();
-             // use center to determine relative angles and lengths
-             Point ctr = center(originalPolygon);
-             double anchorLen = Geom.length(ctr.x, ctr.y, anchor.x, anchor.y);
-             if (anchorLen > 0.0) {
-                     double newLen = Geom.length(ctr.x, ctr.y, p.x, p.y);
-                     double ratio = newLen / anchorLen;
-                     double anchorAngle = Math.atan2(anchor.y - ctr.y, anchor.x - ctr.x);
-                     double newAngle = Math.atan2(p.y - ctr.y, p.x - ctr.x);
-                     double rotation = newAngle - anchorAngle;
-                     int n = originalPolygon.npoints;
-                     int[] xs = new int[n];
-                     int[] ys = new int[n];
-                     for (int i = 0; i < n; ++i) {
-                             int x = originalPolygon.xpoints[i];
-                             int y = originalPolygon.ypoints[i];
-                             double l = Geom.length(ctr.x, ctr.y, x, y) * ratio;
-                             double a = Math.atan2(y - ctr.y, x - ctr.x) + rotation;
-                             xs[i] = (int)(ctr.x + l * Math.cos(a) + 0.5);
-                             ys[i] = (int)(ctr.y + l * Math.sin(a) + 0.5);
-                     }
-                     setInternalPolygon(new Polygon(xs, ys, n));
-             }
-             changed();
-     }
-  */
   @Override
   public void trackEnd(Point anchor, Point lead, int modifiersEx) {
     view.getDrawing()
         .fireUndoableEditHappened(
             new TransformRestoreEdit(
                 getOwner(), restoreData, getOwner().getTransformRestoreData()));
-    location = null;
   }
 }
