@@ -32,23 +32,37 @@ import org.jhotdraw.util.ResourceBundleUtil;
  */
 public class ConnectorHandle extends AbstractHandle {
 
-  /** Holds the ConnectionFigure which is currently being created. */
+
+  /**
+   * All connectors of the connectable Figure.
+   */
+  protected Collection<Connector> connectors = Collections.emptyList();
+
+  /**
+   * Holds the ConnectionFigure which is currently being created.
+   */
   private ConnectionFigure createdConnection;
 
-  /** The prototype for the ConnectionFigure to be created */
+  /**
+   * The prototype for the ConnectionFigure to be created
+   */
   private ConnectionFigure prototype;
 
-  /** The Connector. */
+  /**
+   * The Connector.
+   */
   private Connector connector;
 
-  /** The current connectable Figure. */
+  /**
+   * The current connectable Figure.
+   */
   private Figure connectableFigure;
 
-  /** The current connectable Connector. */
+  /**
+   * The current connectable Connector.
+   */
   private Connector connectableConnector;
 
-  /** All connectors of the connectable Figure. */
-  protected Collection<Connector> connectors = Collections.emptyList();
 
   public ConnectorHandle(Connector connector, ConnectionFigure prototype) {
     super(connector.getOwner());
@@ -74,26 +88,26 @@ public class ConnectorHandle extends AbstractHandle {
     }
     if (createdConnection == null) {
       drawCircle(
-          g,
-          getEditor()
-              .getHandleAttribute(HandleAttributeKeys.DISCONNECTED_CONNECTOR_HANDLE_FILL_COLOR),
-          getEditor()
-              .getHandleAttribute(HandleAttributeKeys.DISCONNECTED_CONNECTOR_HANDLE_STROKE_COLOR));
+              g,
+              getEditor()
+                      .getHandleAttribute(HandleAttributeKeys.DISCONNECTED_CONNECTOR_HANDLE_FILL_COLOR),
+              getEditor()
+                      .getHandleAttribute(HandleAttributeKeys.DISCONNECTED_CONNECTOR_HANDLE_STROKE_COLOR));
     } else {
       drawCircle(
-          g,
-          getEditor().getHandleAttribute(HandleAttributeKeys.CONNECTED_CONNECTOR_HANDLE_FILL_COLOR),
-          getEditor()
-              .getHandleAttribute(HandleAttributeKeys.CONNECTED_CONNECTOR_HANDLE_STROKE_COLOR));
+              g,
+              getEditor().getHandleAttribute(HandleAttributeKeys.CONNECTED_CONNECTOR_HANDLE_FILL_COLOR),
+              getEditor()
+                      .getHandleAttribute(HandleAttributeKeys.CONNECTED_CONNECTOR_HANDLE_STROKE_COLOR));
       Point p = view.drawingToView(createdConnection.getEndPoint());
       g.setColor(
-          getEditor()
-              .getHandleAttribute(HandleAttributeKeys.CONNECTED_CONNECTOR_HANDLE_FILL_COLOR));
+              getEditor()
+                      .getHandleAttribute(HandleAttributeKeys.CONNECTED_CONNECTOR_HANDLE_FILL_COLOR));
       int width = getHandlesize();
       g.fillOval(p.x - width / 2, p.y - width / 2, width, width);
       g.setColor(
-          getEditor()
-              .getHandleAttribute(HandleAttributeKeys.CONNECTED_CONNECTOR_HANDLE_STROKE_COLOR));
+              getEditor()
+                      .getHandleAttribute(HandleAttributeKeys.CONNECTED_CONNECTOR_HANDLE_STROKE_COLOR));
       g.drawOval(p.x - width / 2, p.y - width / 2, width, width);
     }
   }
@@ -109,7 +123,6 @@ public class ConnectorHandle extends AbstractHandle {
 
   @Override
   public void trackStep(Point anchor, Point lead, int modifiersEx) {
-    // updateConnectors(lead);
     Point2D.Double p = view.viewToDrawing(lead);
     fireAreaInvalidated(getDrawingArea());
     Figure figure = findConnectableFigure(p, view.getDrawing());
@@ -155,31 +168,31 @@ public class ConnectorHandle extends AbstractHandle {
       view.clearSelection();
       view.addToSelection(c);
       view.getDrawing()
-          .fireUndoableEditHappened(
-              new AbstractUndoableEdit() {
-                private static final long serialVersionUID = 1L;
+              .fireUndoableEditHappened(
+                      new AbstractUndoableEdit() {
+                        private static final long serialVersionUID = 1L;
 
-                @Override
-                public String getPresentationName() {
-                  ResourceBundleUtil labels =
-                      ResourceBundleUtil.getBundle("org.jhotdraw.draw.Labels");
-                  return labels.getString("edit.createConnectionFigure.text");
-                }
+                        @Override
+                        public String getPresentationName() {
+                          ResourceBundleUtil labels =
+                                  ResourceBundleUtil.getBundle("org.jhotdraw.draw.Labels");
+                          return labels.getString("edit.createConnectionFigure.text");
+                        }
 
-                @Override
-                public void undo() throws CannotUndoException {
-                  super.undo();
-                  drawing.remove(c);
-                }
+                        @Override
+                        public void undo() throws CannotUndoException {
+                          super.undo();
+                          drawing.remove(c);
+                        }
 
-                @Override
-                public void redo() throws CannotRedoException {
-                  super.redo();
-                  drawing.add(c);
-                  view.clearSelection();
-                  view.addToSelection(c);
-                }
-              });
+                        @Override
+                        public void redo() throws CannotRedoException {
+                          super.redo();
+                          drawing.add(c);
+                          view.clearSelection();
+                          view.addToSelection(c);
+                        }
+                      });
     } else {
       view.getDrawing().remove(getConnection());
       fireAreaInvalidated(getDrawingArea());
@@ -190,48 +203,6 @@ public class ConnectorHandle extends AbstractHandle {
     setTargetFigure(null);
   }
 
-  /** Creates the ConnectionFigure. By default the figure prototype is cloned. */
-  protected ConnectionFigure createConnection() {
-    return (ConnectionFigure) prototype.clone();
-  }
-
-  protected void setConnection(ConnectionFigure newConnection) {
-    createdConnection = newConnection;
-  }
-
-  protected ConnectionFigure getConnection() {
-    return createdConnection;
-  }
-
-  protected Figure getTargetFigure() {
-    return connectableFigure;
-  }
-
-  protected void setTargetFigure(Figure newTargetFigure) {
-    connectableFigure = newTargetFigure;
-  }
-
-  private Figure findConnectableFigure(Point2D.Double p, Drawing drawing) {
-    for (Figure figure : drawing.getFiguresFrontToBack()) {
-      if (!figure.includes(getConnection()) && figure.isConnectable() && figure.contains(p)) {
-        return figure;
-      }
-    }
-    return null;
-  }
-
-  /** Finds a connection end figure. */
-  protected Connector findConnectableConnector(Figure connectableFigure, Point2D.Double p) {
-    Connector target =
-        (connectableFigure == null) ? null : connectableFigure.findConnector(p, getConnection());
-    if ((connectableFigure != null)
-        && connectableFigure.isConnectable()
-        && !connectableFigure.includes(getOwner())
-        && getConnection().canConnect(connector, target)) {
-      return target;
-    }
-    return null;
-  }
 
   @Override
   public boolean isCombinableWith(Handle handle) {
@@ -252,9 +223,9 @@ public class ConnectorHandle extends AbstractHandle {
       }
     }
     connectors =
-        (connectableFigure == null)
-            ? Collections.emptyList()
-            : connectableFigure.getConnectors(prototype);
+            (connectableFigure == null)
+                    ? Collections.emptyList()
+                    : connectableFigure.getConnectors(prototype);
     for (Connector c : connectors) {
       if (invalidArea == null) {
         invalidArea = c.getDrawingArea();
@@ -265,5 +236,55 @@ public class ConnectorHandle extends AbstractHandle {
     if (invalidArea != null) {
       view.getComponent().repaint(view.drawingToView(invalidArea));
     }
+  }
+
+
+  /**
+   * Creates the ConnectionFigure. By default the figure prototype is cloned.
+   */
+  protected ConnectionFigure createConnection() {
+    return (ConnectionFigure) prototype.clone();
+  }
+
+  protected void setConnection(ConnectionFigure newConnection) {
+    createdConnection = newConnection;
+  }
+
+  protected ConnectionFigure getConnection() {
+    return createdConnection;
+  }
+
+  protected Figure getTargetFigure() {
+    return connectableFigure;
+  }
+
+  protected void setTargetFigure(Figure newTargetFigure) {
+    connectableFigure = newTargetFigure;
+  }
+
+
+  /**
+   * Finds a connection end figure.
+   */
+  protected Connector findConnectableConnector(Figure connectableFigure, Point2D.Double p) {
+    Connector target =
+            (connectableFigure == null) ? null : connectableFigure.findConnector(p, getConnection());
+    if ((connectableFigure != null)
+            && connectableFigure.isConnectable()
+            && !connectableFigure.includes(getOwner())
+            && getConnection().canConnect(connector, target)) {
+      return target;
+    }
+    return null;
+  }
+
+
+  private Figure findConnectableFigure(Point2D.Double p, Drawing drawing) {
+    for (Figure figure : drawing.getFiguresFrontToBack()) {
+      if (!figure.includes(getConnection()) && figure.isConnectable() && figure.contains(p)) {
+        return figure;
+      }
+    }
+    return null;
   }
 }
