@@ -47,7 +47,7 @@ import org.jhotdraw.util.ResourceBundleUtil;
 public class TextAreaEditingTool extends AbstractTool implements ActionListener {
 
   private static final long serialVersionUID = 1L;
-  private FloatingTextArea textArea;
+  private FusionFloatingText textArea;
   private TextHolderFigure typingTarget;
 
   public TextAreaEditingTool(TextHolderFigure typingTarget) {
@@ -76,7 +76,7 @@ public class TextAreaEditingTool extends AbstractTool implements ActionListener 
 
   protected void beginEdit(TextHolderFigure textHolder) {
     if (textArea == null) {
-      textArea = new FloatingTextArea();
+      textArea = new FusionFloatingText();
       // textArea.addActionListener(this);
     }
     if (textHolder != typingTarget && typingTarget != null) {
