@@ -52,7 +52,7 @@ import org.jhotdraw.util.ResourceBundleUtil;
 public class TextCreationTool extends CreationTool implements ActionListener {
 
   private static final long serialVersionUID = 1L;
-  private FloatingTextField textField;
+  private FusionFloatingText textField;
   private TextHolderFigure typingTarget;
 
   public TextCreationTool(TextHolderFigure prototype) {
@@ -97,7 +97,7 @@ public class TextCreationTool extends CreationTool implements ActionListener {
 
   protected void beginEdit(TextHolderFigure textHolder) {
     if (textField == null) {
-      textField = new FloatingTextField();
+      textField = new FusionFloatingText();
       textField.addActionListener(this);
     }
     if (textHolder != typingTarget && typingTarget != null) {

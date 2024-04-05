@@ -39,7 +39,7 @@ import org.jhotdraw.util.ResourceBundleUtil;
 public class TextEditingTool extends AbstractTool implements ActionListener {
 
   private static final long serialVersionUID = 1L;
-  private FloatingTextField textField;
+  private FusionFloatingText textField;
   private TextHolderFigure typingTarget;
 
   public TextEditingTool(TextHolderFigure typingTarget) {
@@ -63,7 +63,7 @@ public class TextEditingTool extends AbstractTool implements ActionListener {
 
   protected void beginEdit(TextHolderFigure textHolder) {
     if (textField == null) {
-      textField = new FloatingTextField();
+      textField = new FusionFloatingText();
       textField.addActionListener(this);
     }
     if (textHolder != typingTarget && typingTarget != null) {

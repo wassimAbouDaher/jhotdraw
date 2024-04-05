@@ -68,7 +68,7 @@ import org.jhotdraw.util.ResourceBundleUtil;
 public class TextAreaCreationTool extends CreationTool implements ActionListener {
 
   private static final long serialVersionUID = 1L;
-  private FloatingTextArea textArea;
+  private FusionFloatingText textArea;
   private TextHolderFigure typingTarget;
 
   /** Rubberband color of the tool. When this is null, the tool does not draw a rubberband. */
@@ -140,7 +140,7 @@ public class TextAreaCreationTool extends CreationTool implements ActionListener
 
   protected void beginEdit(TextHolderFigure textHolder) {
     if (textArea == null) {
-      textArea = new FloatingTextArea();
+      textArea = new FusionFloatingText();
       // textArea.addActionListener(this);
     }
     if (textHolder != typingTarget && typingTarget != null) {
