@@ -5,13 +5,13 @@
  * You may not use, copy or modify this file, except in compliance with the
  * accompanying license terms.
  */
-package org.jhotdraw.draw.text;
+package org.jhotdraw.draw;
 
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.awt.geom.*;
 import javax.swing.*;
-import org.jhotdraw.draw.*;
+
 import org.jhotdraw.draw.event.FigureEvent;
 import org.jhotdraw.draw.event.FigureListener;
 import org.jhotdraw.draw.event.FigureListenerAdapter;
