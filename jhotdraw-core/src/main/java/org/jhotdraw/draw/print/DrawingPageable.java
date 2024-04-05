@@ -10,6 +10,8 @@ package org.jhotdraw.draw.print;
 import java.awt.*;
 import java.awt.geom.*;
 import java.awt.print.*;
+import java.util.Objects;
+
 import org.jhotdraw.draw.*;
 import org.jhotdraw.draw.figure.Figure;
 
@@ -70,9 +72,9 @@ public class DrawingPageable implements Pageable {
     };
   }
 
-  public int printPage(Graphics graphics, PageFormat pageFormat, int pageIndex) {
+  public int printPage(Graphics graphics, PageFormat pageFormat, int pageIndex){
     if (pageIndex < 0 || pageIndex >= getNumberOfPages()) {
-      return Printable.NO_SUCH_PAGE;
+      throw new IndexOutOfBoundsException("Invalid page index:" + pageIndex);
     }
     if (drawing.getChildCount() > 0) {
       Graphics2D g = (Graphics2D) graphics;
@@ -92,7 +94,7 @@ public class DrawingPageable implements Pageable {
       tx.translate(pageFormat.getImageableX(), pageFormat.getImageableY());
       // Maybe rotate drawing
       if (isAutorotate
-          && drawBounds.width > drawBounds.height
+          && Objects.requireNonNull(drawBounds).width > drawBounds.height
           && pageFormat.getImageableWidth() < pageFormat.getImageableHeight()) {
         double scaleFactor =
             Math.min(
@@ -103,7 +105,8 @@ public class DrawingPageable implements Pageable {
         tx.rotate(Math.PI / 2d, 0, 0);
         tx.translate(-drawBounds.x, -drawBounds.y);
       } else {
-        double scaleFactor =
+          assert drawBounds != null;
+          double scaleFactor =
             Math.min(
                 pageFormat.getImageableWidth() / drawBounds.width,
                 pageFormat.getImageableHeight() / drawBounds.height);
