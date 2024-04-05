@@ -42,148 +42,138 @@ public class SlantedLiner implements Liner {
     if (start == null || end == null || path == null) {
       return;
     }
-    // Special treatment if the connection connects the same figure
     if (figure.getStartFigure() == figure.getEndFigure()) {
-      // Ensure path has exactly four nodes
-      while (path.size() < 5) {
-        path.add(1, new BezierPath.Node(0, 0));
-      }
-      while (path.size() > 5) {
-        path.remove(1);
-      }
-      Point2D.Double sp = start.findStart(figure);
-      Point2D.Double ep = end.findEnd(figure);
+      handleSameFigureConnection(path, start, end, figure);
+    } else {
+      handleDifferentFigureConnection(path, start, end);
+    }
+    ensureStraightPathNodes(path);
+    path.invalidatePath();
+  }
+
+  private void handleSameFigureConnection(BezierPath path, Connector start, Connector end, ConnectionFigure figure) {
+    // Ensure path has exactly four nodes
+    while (path.size() < 5) {
+      path.add(1, new BezierPath.Node(0, 0));
+    }
+    while (path.size() > 5) {
+      path.remove(1);
+    }
+    Point2D.Double sp = start.findStart(figure);
+    Point2D.Double ep = end.findEnd(figure);
+    Rectangle2D.Double sb = start.getBounds();
+    Rectangle2D.Double eb = end.getBounds();
+    int soutcode = sb.outcode(sp);
+    if (soutcode == 0) {
+      soutcode = Geom.outcode(sb, eb);
+    }
+    int eoutcode = eb.outcode(ep);
+    if (eoutcode == 0) {
+      eoutcode = Geom.outcode(sb, eb);
+    }
+    path.nodes().get(0).moveTo(sp);
+    path.nodes().get(path.size() - 1).moveTo(ep);
+    switch (soutcode) {
+      case Geom.OUT_TOP:
+        eoutcode = Geom.OUT_LEFT;
+        break;
+      case Geom.OUT_RIGHT:
+        eoutcode = Geom.OUT_TOP;
+        break;
+      case Geom.OUT_BOTTOM:
+        eoutcode = Geom.OUT_RIGHT;
+        break;
+      case Geom.OUT_LEFT:
+        eoutcode = Geom.OUT_BOTTOM;
+        break;
+      default:
+        eoutcode = Geom.OUT_TOP;
+        soutcode = Geom.OUT_RIGHT;
+        break;
+    }
+    path.nodes().get(1).moveTo(sp.x + slantSize, sp.y);
+    if ((soutcode & Geom.OUT_RIGHT) != 0) {
+      path.nodes().get(1).moveTo(sp.x + slantSize, sp.y);
+    } else if ((soutcode & Geom.OUT_LEFT) != 0) {
+      path.nodes().get(1).moveTo(sp.x - slantSize, sp.y);
+    } else if ((soutcode & Geom.OUT_BOTTOM) != 0) {
+      path.nodes().get(1).moveTo(sp.x, sp.y + slantSize);
+    } else {
+      path.nodes().get(1).moveTo(sp.x, sp.y - slantSize);
+    }
+    if ((eoutcode & Geom.OUT_RIGHT) != 0) {
+      path.nodes().get(3).moveTo(ep.x + slantSize, ep.y);
+    } else if ((eoutcode & Geom.OUT_LEFT) != 0) {
+      path.nodes().get(3).moveTo(ep.x - slantSize, ep.y);
+    } else if ((eoutcode & Geom.OUT_BOTTOM) != 0) {
+      path.nodes().get(3).moveTo(ep.x, ep.y + slantSize);
+    } else {
+      path.nodes().get(3).moveTo(ep.x, ep.y - slantSize);
+    }
+    switch (soutcode) {
+      case Geom.OUT_RIGHT:
+        path.nodes().get(2).moveTo(path.nodes().get(1).x[0], path.nodes().get(3).y[0]);
+        break;
+      case Geom.OUT_TOP:
+        path.nodes().get(2).moveTo(path.nodes().get(1).y[0], path.nodes().get(3).x[0]);
+        break;
+      case Geom.OUT_LEFT:
+        path.nodes().get(2).moveTo(path.nodes().get(1).x[0], path.nodes().get(3).y[0]);
+        break;
+      case Geom.OUT_BOTTOM:
+      default:
+        path.nodes().get(2).moveTo(path.nodes().get(1).y[0], path.nodes().get(3).x[0]);
+        break;
+    }
+  }
+
+  private void handleDifferentFigureConnection(BezierPath path, Connector start, Connector end) {
+    Point2D.Double sp = start.getAnchor();
+    Point2D.Double ep = end.getAnchor();
+    path.clear();
+    path.add(new BezierPath.Node(sp.x, sp.y));
+    if (sp.x == ep.x || sp.y == ep.y) {
+      path.add(new BezierPath.Node(ep.x, ep.y));
+    } else {
       Rectangle2D.Double sb = start.getBounds();
+      sb.x += 5d;
+      sb.y += 5d;
+      sb.width -= 10d;
+      sb.height -= 10d;
       Rectangle2D.Double eb = end.getBounds();
+      eb.x += 5d;
+      eb.y += 5d;
+      eb.width -= 10d;
+      eb.height -= 10d;
       int soutcode = sb.outcode(sp);
       if (soutcode == 0) {
         soutcode = Geom.outcode(sb, eb);
       }
       int eoutcode = eb.outcode(ep);
       if (eoutcode == 0) {
-        eoutcode = Geom.outcode(sb, eb);
+        eoutcode = Geom.outcode(eb, sb);
       }
-      path.nodes().get(0).moveTo(sp);
-      path.nodes().get(path.size() - 1).moveTo(ep);
-      switch (soutcode) {
-        case Geom.OUT_TOP:
-          eoutcode = Geom.OUT_LEFT;
-          break;
-        case Geom.OUT_RIGHT:
-          eoutcode = Geom.OUT_TOP;
-          break;
-        case Geom.OUT_BOTTOM:
-          eoutcode = Geom.OUT_RIGHT;
-          break;
-        case Geom.OUT_LEFT:
-          eoutcode = Geom.OUT_BOTTOM;
-          break;
-        default:
-          eoutcode = Geom.OUT_TOP;
-          soutcode = Geom.OUT_RIGHT;
-          break;
-      }
-      path.nodes().get(1).moveTo(sp.x + slantSize, sp.y);
-      if ((soutcode & Geom.OUT_RIGHT) != 0) {
-        path.nodes().get(1).moveTo(sp.x + slantSize, sp.y);
-      } else if ((soutcode & Geom.OUT_LEFT) != 0) {
-        path.nodes().get(1).moveTo(sp.x - slantSize, sp.y);
-      } else if ((soutcode & Geom.OUT_BOTTOM) != 0) {
-        path.nodes().get(1).moveTo(sp.x, sp.y + slantSize);
+      if ((soutcode & (Geom.OUT_TOP | Geom.OUT_BOTTOM)) != 0
+              && (eoutcode & (Geom.OUT_TOP | Geom.OUT_BOTTOM)) != 0) {
+        path.add(new BezierPath.Node(sp.x, (sp.y + ep.y) / 2));
+        path.add(new BezierPath.Node(ep.x, (sp.y + ep.y) / 2));
+      } else if ((soutcode & (Geom.OUT_LEFT | Geom.OUT_RIGHT)) != 0
+              && (eoutcode & (Geom.OUT_LEFT | Geom.OUT_RIGHT)) != 0) {
+        path.add(new BezierPath.Node((sp.x + ep.x) / 2, sp.y));
+        path.add(new BezierPath.Node((sp.x + ep.x) / 2, ep.y));
+      } else if (soutcode == Geom.OUT_BOTTOM || soutcode == Geom.OUT_TOP) {
+        path.add(new BezierPath.Node(sp.x, ep.y));
       } else {
-        path.nodes().get(1).moveTo(sp.x, sp.y - slantSize);
+        path.add(new BezierPath.Node(ep.x, sp.y));
       }
-      if ((eoutcode & Geom.OUT_RIGHT) != 0) {
-        path.nodes().get(3).moveTo(ep.x + slantSize, ep.y);
-      } else if ((eoutcode & Geom.OUT_LEFT) != 0) {
-        path.nodes().get(3).moveTo(ep.x - slantSize, ep.y);
-      } else if ((eoutcode & Geom.OUT_BOTTOM) != 0) {
-        path.nodes().get(3).moveTo(ep.x, ep.y + slantSize);
-      } else {
-        path.nodes().get(3).moveTo(ep.x, ep.y - slantSize);
-      }
-      switch (soutcode) {
-        case Geom.OUT_RIGHT:
-          path.nodes().get(2).moveTo(path.nodes().get(1).x[0], path.nodes().get(3).y[0]);
-          break;
-        case Geom.OUT_TOP:
-          path.nodes().get(2).moveTo(path.nodes().get(1).y[0], path.nodes().get(3).x[0]);
-          break;
-        case Geom.OUT_LEFT:
-          path.nodes().get(2).moveTo(path.nodes().get(1).x[0], path.nodes().get(3).y[0]);
-          break;
-        case Geom.OUT_BOTTOM:
-        default:
-          path.nodes().get(2).moveTo(path.nodes().get(1).y[0], path.nodes().get(3).x[0]);
-          break;
-      }
-      // Regular treatment if the connection connects to two different figures
-    } else {
-      // Ensure path has exactly four nodes
-      while (path.size() < 4) {
-        path.add(1, new BezierPath.Node(0, 0));
-      }
-      while (path.size() > 4) {
-        path.remove(1);
-      }
-      Point2D.Double sp = start.findStart(figure);
-      Point2D.Double ep = end.findEnd(figure);
-      Rectangle2D.Double sb = start.getBounds();
-      Rectangle2D.Double eb = end.getBounds();
-      int soutcode = sb.outcode(sp);
-      if (soutcode == 0) {
-        if (sp.x <= sb.x) {
-          soutcode = Geom.OUT_LEFT;
-        } else if (sp.y <= sb.y) {
-          soutcode = Geom.OUT_TOP;
-        } else if (sp.x >= sb.x + sb.width) {
-          soutcode = Geom.OUT_RIGHT;
-        } else if (sp.y >= sb.y + sb.height) {
-          soutcode = Geom.OUT_BOTTOM;
-        } else {
-          soutcode = Geom.outcode(sb, eb);
-        }
-      }
-      int eoutcode = eb.outcode(ep);
-      if (eoutcode == 0) {
-        if (ep.x <= eb.x) {
-          eoutcode = Geom.OUT_LEFT;
-        } else if (ep.y <= eb.y) {
-          eoutcode = Geom.OUT_TOP;
-        } else if (ep.x >= eb.x + eb.width) {
-          eoutcode = Geom.OUT_RIGHT;
-        } else if (ep.y >= eb.y + eb.height) {
-          eoutcode = Geom.OUT_BOTTOM;
-        } else {
-          eoutcode = Geom.outcode(sb, eb);
-        }
-      }
-      path.nodes().get(0).moveTo(sp);
-      path.nodes().get(path.size() - 1).moveTo(ep);
-      if ((soutcode & Geom.OUT_RIGHT) != 0) {
-        path.nodes().get(1).moveTo(sp.x + slantSize, sp.y);
-      } else if ((soutcode & Geom.OUT_LEFT) != 0) {
-        path.nodes().get(1).moveTo(sp.x - slantSize, sp.y);
-      } else if ((soutcode & Geom.OUT_BOTTOM) != 0) {
-        path.nodes().get(1).moveTo(sp.x, sp.y + slantSize);
-      } else {
-        path.nodes().get(1).moveTo(sp.x, sp.y - slantSize);
-      }
-      if ((eoutcode & Geom.OUT_RIGHT) != 0) {
-        path.nodes().get(2).moveTo(ep.x + slantSize, ep.y);
-      } else if ((eoutcode & Geom.OUT_LEFT) != 0) {
-        path.nodes().get(2).moveTo(ep.x - slantSize, ep.y);
-      } else if ((eoutcode & Geom.OUT_BOTTOM) != 0) {
-        path.nodes().get(2).moveTo(ep.x, ep.y + slantSize);
-      } else {
-        path.nodes().get(2).moveTo(ep.x, ep.y - slantSize);
-      }
+      path.add(new BezierPath.Node(ep.x, ep.y));
     }
-    // Ensure all path nodes are straight
+  }
+
+  private void ensureStraightPathNodes(BezierPath path) {
     for (BezierPath.Node node : path.nodes()) {
       node.setMask(BezierPath.C0_MASK);
     }
-    path.invalidatePath();
   }
 
 
