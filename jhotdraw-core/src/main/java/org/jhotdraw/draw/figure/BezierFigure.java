@@ -622,46 +622,32 @@ public class BezierFigure extends AbstractAttributedFigure {
     return path.splitSegment(split, tolerance);
   }
 
-  /** Handles a mouse click. */
   @Override
   public boolean handleMouseClick(Point2D.Double p, MouseEvent evt, DrawingView view) {
-    if (evt.getClickCount() == 2 && view.getHandleDetailLevel() % 2 == 0) {
-      willChange();
-      final int index = splitSegment(p, 5f / view.getScaleFactor());
-      if (index != -1) {
-        final BezierPath.Node newNode = getNode(index);
-        fireUndoableEditHappened(
-            new AbstractUndoableEdit() {
-              private static final long serialVersionUID = 1L;
-
-              @Override
-              public String getPresentationName() {
-                ResourceBundleUtil labels =
-                    ResourceBundleUtil.getBundle("org.jhotdraw.draw.Labels");
-                return labels.getString("edit.bezierPath.splitSegment.text");
-              }
-
-              @Override
-              public void redo() throws CannotRedoException {
-                super.redo();
-                willChange();
-                addNode(index, newNode);
-                changed();
-              }
-
-              @Override
-              public void undo() throws CannotUndoException {
-                super.undo();
-                willChange();
-                removeNode(index);
-                changed();
-              }
-            });
-        changed();
-        evt.consume();
-        return true;
+    if (detectDoubleClick(evt)) {
+      if (checkDetailViewLevel(view)) {
+        return splitBezierSegment(p, view);
       }
     }
     return false;
   }
+
+  private boolean detectDoubleClick(MouseEvent evt) {
+    return evt.getClickCount() == 2;
+  }
+
+  private boolean checkDetailViewLevel(DrawingView view) {
+    return view.getHandleDetailLevel() % 2 == 0;
+  }
+
+  private boolean splitBezierSegment(Point2D.Double p, DrawingView view) {
+    int index = findSegment(p, 5f / view.getScaleFactor());
+    if (index != -1) {
+      addNode(index + 1, new BezierPath.Node(p));
+      return true;
+    }
+    return false;
+  }
+
+
 }
